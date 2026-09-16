@@ -3,10 +3,10 @@
 // Une Uno ne peut PAS se faire passer pour une manette USB avec ce sketch.
 //
 // Cablage HX711 -> Arduino :
-//   VCC -> 5V
+//   VCC -> 5V (ou VCC)
 //   GND -> GND
-//   DT  -> pin 2
-//   SCK -> pin 3
+//   DT  -> A0
+//   SCK -> A1
 //
 // Load cell -> HX711 :
 //   Rouge -> E+
@@ -19,18 +19,24 @@
 
 #include <Joystick.h>
 
-const int HX711_DOUT = 2;
-const int HX711_SCK = 3;
+// Throttle only (axe Handbrake dans le jeu)
+Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID,
+  JOYSTICK_TYPE_MULTI_AXIS, 0, 0,
+  false, false, false, false, false, false,
+  false, true, false, false, false);
+
+const int HX711_DOUT = A0;
+const int HX711_SCK = A1;
 
 // Inverse si le throttle monte au repos et baisse quand tu tires
 const bool INVERT = false;
 
 // Valeur FORCE max vue dans test_loadcell.ino (levier tire a fond).
 // Trop grand = tu n'atteins jamais 100%. Trop petit = saturation trop tot.
-long RAW_MAX = 30000;
+long RAW_MAX = 750000;
 
 // Ignore le bruit au repos. Monte un peu si l'axe tremble a 0.
-const long DEADZONE = 400;
+const long DEADZONE = 3000;
 
 long offset = 0;
 
@@ -92,6 +98,7 @@ void setup() {
   digitalWrite(HX711_SCK, LOW);
   pinMode(LED_BUILTIN, OUTPUT);
 
+  Joystick.setThrottleRange(0, 255);
   Joystick.begin();
   Joystick.setThrottle(0);
 

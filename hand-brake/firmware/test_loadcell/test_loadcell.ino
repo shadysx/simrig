@@ -9,8 +9,8 @@
 // 6. Laisse le frein à main au repos 2 secondes (tare auto)
 // 7. Tire à fond, note la valeur "force" MAX. C'est RAW_MAX pour le firmware.
 
-const int HX711_DOUT = 2;  // DT du HX711
-const int HX711_SCK = 3;   // SCK du HX711
+const int HX711_DOUT = A0;  // DT du HX711
+const int HX711_SCK = A1;   // SCK du HX711
 
 // Inverse si la valeur descend quand tu tires
 const bool INVERT = false;
